@@ -112,12 +112,16 @@
   \vspace{1.5em}%
 }
 
-% 例題環境（枠付き）- 【】内の番号を使用
+% 例題環境（枠付き）- 【】内の番号を使用（行間を広めに設定）
 \newenvironment{example}[1][\relax]{%
   \vspace{2em}%
   \begin{itembox}[l]{\textbf{例題}%
   \ifx#1\relax\else~\textbf{#1}\fi}%
+  \linespread{1.5}\selectfont%
+  \setlength{\parskip}{0.6em}%
 }{%
+  \setlength{\parskip}{0pt}%
+  \linespread{1.15}\selectfont%
   \end{itembox}%
   \vspace{1.5em}%
 }
