@@ -1,0 +1,40 @@
+# LaTeX中間ファイル
+*.aux
+*.log
+*.dvi
+*.pdf
+*.toc
+*.out
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.bbl
+*.blg
+*.idx
+*.ilg
+*.ind
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# エディタ関連
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# 一時ファイル
+*_独立版.tex
+*_独立版.pdf
+
+# PDFファイルを除外しない場合は、次の行をコメントアウトしてください
+# !main.pdf
+
