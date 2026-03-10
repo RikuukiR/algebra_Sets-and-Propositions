@@ -39,11 +39,11 @@
   \ifshowanswer
     \textcolor{blue}{\frac{#1}{#2}}%  解答版：青色
   \else
-    \frac{\phantom{#1}}{#2}%  空欄版：分子を透明化、レイアウト保持
+    \frac{\phantom{#1}}{#2}%  空欄版：分子を透明化, レイアウト保持
   \fi
 }
 
-% enumerate環境のデフォルト設定（（１）、（２）形式）
+% enumerate環境のデフォルト設定（（１）, （２）形式）
 \setlist[enumerate,1]{label=（\arabic*）, leftmargin=*, labelsep=0.5em}
 \setlist[enumerate,2]{label=（\alph*）, leftmargin=*, labelsep=0.5em}
 
@@ -81,6 +81,16 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem*{theorem*}{Theorem}
 
+% 証明環境内では段落を全角1文字ぶん下げて文頭を揃える
+\let\oldproof\proof
+\let\endoldproof\endproof
+\renewenvironment{proof}{%
+  \oldproof%
+  \setlength{\parindent}{1em}%
+}{%
+  \endoldproof%
+}
+
 % ========================================
 % 問題環境の設定
 % ========================================
@@ -88,7 +98,7 @@
 \newcounter{problemcounter}
 \renewcommand{\theproblemcounter}{\arabic{problemcounter}}
 
-% 問題環境（枠なし、シンプル）
+% 問題環境（枠なし, シンプル）
 \newenvironment{problem}[1][\relax]{%
   \refstepcounter{problemcounter}%
   \vspace{2em}%
@@ -126,12 +136,16 @@
   \vspace{1.5em}%
 }
 
-% 練習問題環境（枠付き）- 【】内の番号を使用
+% 練習問題環境（枠付き）- 【】内の番号を使用（例題と同じ行間設定）
 \newenvironment{exercise}[1][\relax]{%
   \vspace{2em}%
   \begin{itembox}[l]{\textbf{練習問題}%
   \ifx#1\relax\else~\textbf{#1}\fi}%
+  \linespread{1.5}\selectfont%
+  \setlength{\parskip}{0.6em}%
 }{%
+  \setlength{\parskip}{0pt}%
+  \linespread{1.15}\selectfont%
   \end{itembox}%
   \vspace{1.5em}%
 }
@@ -147,22 +161,23 @@
   \par\vspace{1em}%
 }
 
-% 問題専用の解答環境（常に空欄、手書きスペース確保）
+% 問題専用の解答環境（常に空欄, 手書きスペース確保）
 % 使い方: \begin{problemsolution}[高さ] ... \end{problemsolution}
 % デフォルト高さは15cm
-% ※最後の空白は手動で \vspace{5\baselineskip} を追加してください
-% 空欄時: 解答内容を白色で出力し、証明終了記号（□）を同じ位置に配置
+% 空欄時: 解答内容を白色で出力し, 手書き用に数行ぶんの空白を追加
 \NewEnviron{problemsolution}[1][15cm]{%
-  \begin{proof}\mbox{}\\%
+  \par\vspace{1em}%
+  \noindent%
   \ifshowanswer%
-    {\color{blue}\BODY}%
+    {\color{blue}\BODY\par\hfill$\square$}%
   \else%
     {\color{white}\BODY}%
+    \par\vspace{5\baselineskip}\hfill$\square$%
   \fi%
-  \end{proof}%
+  \par\vspace{1em}%
 }
 
-% 別解環境（解答表示時のみ表示、ピリオドなし）
+% 別解環境（解答表示時のみ表示, ピリオドなし）
 \NewEnviron{altproof}{%
   \ifshowanswer%
     \par\vspace{1em}%
@@ -243,7 +258,7 @@
 % ========================================
 
 % 定義環境（赤系：薄い赤背景 + 赤枠）- 自動番号付き
-% 注: #1はラベル（オプション）、#2はタイトル（必須）
+% 注: #1はラベル（オプション）, #2はタイトル（必須）
 \newtcolorbox{definitionbox}[2][]{
     enhanced,
     colback=red!5,
@@ -257,7 +272,7 @@
 }
 
 % 定理環境（青系：薄い青背景 + 青枠）- 自動番号付き
-% 注: #1はラベル（オプション）、#2はタイトル（必須）
+% 注: #1はラベル（オプション）, #2はタイトル（必須）
 \newtcolorbox{theorembox}[2][]{
     enhanced,
     colback=blue!5,
@@ -283,7 +298,7 @@
 }
 
 % ========================================
-% 手書き用空欄コマンド（下線なし、スペース確保）
+% 手書き用空欄コマンド（下線なし, スペース確保）
 % ========================================
 
 % 解答ブロック全体の表示/非表示
@@ -297,7 +312,7 @@
 }
 
 % ========================================
-% answer用コマンド（レイアウト基準は答えの幅、空欄時も幅を確保）
+% answer用コマンド（レイアウト基準は答えの幅, 空欄時も幅を確保）
 % ========================================
 
 % インライン用（テキスト・数式両用）
@@ -329,7 +344,7 @@
   \ifshowanswer
     \textcolor{blue}{#1}%  解答版：青色で表示
   \else
-    \phantom{#1}%  空欄版：透明化、レイアウト保持
+    \phantom{#1}%  空欄版：透明化, レイアウト保持
   \fi
 }
 
@@ -351,7 +366,7 @@
 
 % 数式ブロック用（align環境など内部で使用）
 % 使い方: \blankmath{数式}
-% 解答時・空欄時とも: 答えの幅 + 左1.5em、右2.5em空白
+% 解答時・空欄時とも: 答えの幅 + 左1.5em, 右2.5em空白
 \newcommand{\blankmath}[1]{%
   \ifshowanswer
     \hspace{1.5em}{\color{blue}#1}\hspace{2.5em}%
@@ -406,7 +421,7 @@
   \ifshowanswer
     \textcolor{blue}{\frac{#1}{#2}}%  解答版：青色
   \else
-    \frac{\phantom{#1}}{#2}%  空欄版：分子を透明化、レイアウト保持
+    \frac{\phantom{#1}}{#2}%  空欄版：分子を透明化, レイアウト保持
   \fi
 }
 
