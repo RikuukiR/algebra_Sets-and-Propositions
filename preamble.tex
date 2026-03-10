@@ -194,7 +194,7 @@
 % 解答を隠したい場合：\showanswerfalse
 \newif\ifshowanswer
 % ←ここを \showanswertrue に変更すると解答が表示されます
-\showanswertrue
+\showanswerfalse
 % 穴埋めコマンドの修正版（upLaTeX対応）
 \newcommand{\Blank}[2][3cm]{%
   ~%
@@ -298,6 +298,25 @@
 }
 
 % ========================================
+% テクニック環境（緑系：薄い緑背景 + 緑枠）
+% 定理と同じ「表示形式・リセット単位」だが, カウンターは独立（theoremとは混ぜない）
+% ========================================
+\newcounter{technique}
+\numberwithin{technique}{subsection}
+\renewcommand{\thetechnique}{\arabic{section}.\arabic{subsection}.\arabic{technique}}
+\newtcolorbox{techniquebox}[2][]{
+    enhanced,
+    colback=green!5,
+    colframe=green!70!black,
+    boxrule=0.8pt,
+    sharp corners,
+    left=10pt, right=10pt, top=8pt, bottom=8pt,
+    fonttitle=\bfseries,
+    code={\refstepcounter{technique}\if\relax\detokenize{#1}\relax\else\label{#1}\fi},
+    title={Technique \thetechnique\if\relax\detokenize{#2}\relax\else\quad\textbf{#2}\fi}
+}
+
+% ========================================
 % 手書き用空欄コマンド（下線なし, スペース確保）
 % ========================================
 
@@ -334,6 +353,29 @@
     {\color{blue}#1}%  数式を青色で表示
   \else
     \hspace{2em}\phantom{#1}\hspace{2em}%  空欄時は答えの幅 + 両端2em
+  \fi
+}
+
+% align環境全体を解答表示機能の対象にする環境
+% 使い方: \begin{alignanswer*} ... \end{alignanswer*}
+% 空欄時: 前後に空白を追加（手書き用）
+\NewEnviron{alignanswer*}{%
+  \ifshowanswer
+    \begingroup
+    \color{blue}%
+    \begin{align*}
+      \BODY
+    \end{align*}%
+    \endgroup
+  \else
+    \vspace{1em}%
+    \begingroup
+    \color{white}%
+    \begin{align*}
+      \BODY
+    \end{align*}%
+    \endgroup
+    \vspace{1em}%
   \fi
 }
 
